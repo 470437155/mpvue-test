@@ -12,11 +12,31 @@
         <div class="shelf-text">特别精选</div>
       </div>
       <div class="book-info">
-          <div class="book-wrapper">
-              <ImageView />
+        <div class="book-wrapper">
+          <div class="book-img-wrapper">
+            <ImageView
+              src="https://www.youbaobao.xyz/book/res/img//EarthSciences/978-981-10-3713-9_CoverFigure.jpg"
+            />
           </div>
+          <div class="book-img-wrapper">
+            <ImageView
+              src="https://www.youbaobao.xyz/book/res/img//EarthSciences/978-981-10-3713-9_CoverFigure.jpg"
+            />
+          </div>
+          <div class="book-img-wrapper">
+            <ImageView
+              src="https://www.youbaobao.xyz/book/res/img//EarthSciences/978-981-10-3713-9_CoverFigure.jpg"
+            />
+          </div>
+        </div>
+        <div class="shelf-wrapper">
+          <div class="shelf">书架</div>
+          <van-icon class="arrow" name="arrow" size="11px" color="#828489"></van-icon>
+        </div>
       </div>
-      <div class="feedback-wrapper"></div>
+      <div class="feedback-wrapper">
+        <span>反馈</span>
+      </div>
     </div>
   </div>
 </template>
@@ -74,6 +94,7 @@ export default {
   border-radius: 15px;
   margin: 22px 20px 0;
   .home-card-inner {
+    position: relative;
     padding: 21px 17px 20px 20px;
     box-sizing: border-box;
     .user-info {
@@ -101,11 +122,46 @@ export default {
       }
     }
     .book-info {
-        .book-wrapper{
-
+      display: flex;
+      margin-top: 16.5px;
+      .book-wrapper {
+        flex: 1;
+        display: flex;
+        justify-content: space-around;
+        .book-img-wrapper {
+          width: 72px;
+          height: 101px;
         }
+      }
+      .shelf-wrapper {
+        display: flex;
+        align-items: center;
+        .shelf {
+          font-size: 11px;
+          width: 11px;
+          word-break: break-word;
+          opacity: 0.8;
+          color: #ffffff;
+        }
+      }
     }
     .feedback-wrapper {
+      border-radius: 100px 0 0 100px;
+      background: #707070;
+      width: 44.5px;
+      height: 24px;
+      position: absolute;
+      right: 0;
+      top: 21px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      // line-height: 24px;
+      text-align: center;
+      span{
+        color: #fff;
+        font-size: 11px;
+      }
     }
   }
 }
