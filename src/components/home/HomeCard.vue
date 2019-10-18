@@ -34,10 +34,11 @@
           <van-icon class="arrow" name="arrow" size="11px" color="#828489"></van-icon>
         </div>
       </div>
-      <div class="feedback-wrapper">
+      <div class="feedback-wrapper" @click="onFeedBackClick">
         <span>反馈</span>
       </div>
     </div>
+    <van-dialog id="van-dialog" />
   </div>
 </template>
 
@@ -45,7 +46,7 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import ImageView from "../../components/base/ImageView";
-
+import Dialog from "vant-weapp/dist/dialog/dialog"
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: { ImageView },
@@ -72,7 +73,20 @@ export default {
   methods: {
     gotoShelf() {},
     onBookClick() {},
-    sign() {}
+    sign() {},
+    onFeedBackClick(){
+      Dialog.confirm({
+        title:'反馈',
+        message:"您是否确认提交反馈信息",
+        confirmButtonText:"是",
+        cancelButtonText:'否'
+      }).then(()=>{
+        console.log('是');
+      }).catch(()=>{
+        console.log('否');
+        
+      })
+    }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
