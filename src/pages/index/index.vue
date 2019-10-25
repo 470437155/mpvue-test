@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <SearchBar :disabled="true" />
-    <HomeCard />
+    <SearchBar :disabled="true" :hotSearch="hotSearch"/>
+    <HomeCard :data="homeCard"/>
     <HomeBanner
       title="来了来了"
       subTitle="6666666"
@@ -9,7 +9,52 @@
       @onClick="onBannerClick"
     />
     <div :style="{marginTop:'23px'}">
-      <HomeBook title="为你推荐" :data="data" :row="1" :col="3"/>
+      <HomeBook
+        title="为你推荐"
+        :data="recommend"
+        :row="1"
+        :col="3"
+        mode="col"
+        btn-text="换一批"
+        @onMoreClick="onBookMoreClick"
+        @onBookClick="onHomeBookClick"
+      />
+    </div>
+    <div :style="{marginTop:'23px'}">
+      <HomeBook
+        title="免费阅读"
+        :data="freeRead"
+        :row="2"
+        :col="2"
+        mode="row"
+        btn-text="换一批"
+        @onMoreClick="onBookMoreClick"
+        @onBookClick="onHomeBookClick"
+      />
+    </div>
+    <div :style="{marginTop:'23px'}">
+      <HomeBook
+        title="当前最热"
+        :data="hotBook"
+        :row="1"
+        :col="4"
+        mode="col"
+        btn-text="换一批"
+        @onMoreClick="onBookMoreClick"
+        @onBookClick="onHomeBookClick"
+      />
+    </div>
+    <div :style="{marginTop:'23px'}">
+      <HomeBook
+        title="分类"
+        :data="category"
+        :row="2"
+        :col="2"
+        mode="category"
+        btn-text="查看全部"
+        @onMoreClick="onBookMoreClick"
+        @onBookClick="onHomeBookClick"
+      />
     </div>
   </div>
 </template>
@@ -19,54 +64,17 @@ import SearchBar from "../../components/home/SearchBar";
 import HomeCard from "../../components/home/HomeCard";
 import HomeBanner from "../../components/home/HomeBanner";
 import HomeBook from "../../components/home/HomeBook";
+import { getHomeData } from "../../api/index";
 export default {
   data() {
     return {
-      data: [
-        {
-          id: 225,
-          fileName: "2016_Book_MicrofinanceEUStructuralFundsA",
-          cover:
-            "https://www.youbaobao.xyz/book/res/img/Economics/2016_Book_MicrofinanceEUStructuralFundsA.jpeg",
-          title:
-            "Microfinance, EU Structural Funds and Capacity Building for Managing Authorities",
-          author: "Giovanni Nicola Pes",
-          publisher: "Palgrave Macmillan",
-          bookId: "2016_Book_MicrofinanceEUStructuralFundsA",
-          category: 3,
-          categoryText: "Economics",
-          language: "en",
-          rootFile: "OEBPS/9781137536013.opf"
-        },
-        {
-          id: 88,
-          fileName: "2018_Book_BetweenMobilityAndMigration",
-          cover:
-            "https://www.youbaobao.xyz/book/res/img/SocialSciences/978-3-319-77991-1_CoverFigure.jpg",
-          title: "Between Mobility and Migration",
-          author: "Peter Scholten",
-          publisher: "Springer International Publishing",
-          bookId: "2018_Book_BetweenMobilityAndMigration",
-          category: 2,
-          categoryText: "SocialSciences",
-          language: "en",
-          rootFile: "OEBPS/package.opf"
-        },
-        {
-          id: 24,
-          fileName: "2018_Book_SecurityInComputerAndInformati",
-          cover:
-            "https://www.youbaobao.xyz/book/res/img/ComputerScience/978-3-319-95189-8_CoverFigure.jpg",
-          title: "Security in Computer and Information Sciences",
-          author: "Erol Gelenbe",
-          publisher: "Springer International Publishing",
-          bookId: "2018_Book_SecurityInComputerAndInformati",
-          category: 1,
-          categoryText: "ComputerScience",
-          language: "en",
-          rootFile: "OEBPS/package.opf"
-        }
-      ]
+      homeCard:{},
+      hotSearch: "",
+      banner: {},
+      recommend: [],
+      freeRead: [],
+      hotBook: [],
+      category: []
     };
   },
 
@@ -76,8 +84,57 @@ export default {
     HomeBanner,
     HomeBook
   },
-
+  mounted() {
+    this.getHomeData();
+  },
   methods: {
+    getHomeData() {
+      getHomeData({ openId: "1234" }).then(res => {
+        console.log(res);
+        const {
+          data: {
+            hotSearch:{keyword},
+            shelf,
+            banner,
+            recommend,
+            freeRead,
+            hotBook,
+            category,
+            shelfCount
+          }
+        } = res.data;
+        console.log(
+          keyword,
+          shelf,
+          banner,
+          recommend,
+          freeRead,
+          hotBook,
+          category,
+          shelfCount
+        );
+        this.hotSearch = keyword
+          this.banner=banner
+          this.recommend=recommend
+          this.freeRead=freeRead
+          this.hotBook=hotBook
+          this.category=category
+          this.homeCard={
+            bookList:shelf,
+            num :shelfCount,
+            userInfo:{
+              avatar:"https://www.youbaobao.xyz/mpvue-res/logo.jpg",
+              nickname:'Ray'
+            }
+          }
+      });
+    },
+    onHomeBookClick() {
+      console.log("book click");
+    },
+    onBookMoreClick() {
+      console.log("more click");
+    },
     onSearchBarClick() {},
     onBannerClick() {
       console.log("banner click");

@@ -3,7 +3,7 @@
   <div class="search-bar">
     <div class="search-bar-wrapper">
       <van-icon class="search" name="search" size="16px" color="#858C96"></van-icon>
-      <input placeholder-style="color:#ADB4BE;" @confirm="onConfirm" confirm-type="search" @input="onChange" v-model="searchWord" :placeholder="hotSearch.length === 0? '搜索':hotSearch" :focus="focus" :maxlength="limit" :disabled="disabled" class="search-bar-input" />
+      <input placeholder-style="color:#ADB4BE;font-size:15px;" @confirm="onConfirm" confirm-type="search" @input="onChange" v-model="searchWord" :placeholder="hotSearch.length === 0? '搜索':hotSearch" :focus="focus" :maxlength="limit" :disabled="disabled" class="search-bar-input" />
       <van-icon v-if="searchWord.length >0" @click="onClearClick" class="clear" name="clear" size="16px" color="#858C96"></van-icon>
     </div>
   </div>
