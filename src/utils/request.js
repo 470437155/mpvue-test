@@ -9,7 +9,7 @@ function createFly() {
 function handleError(err) {
   console.log(err);
 }
-export function get(url, params = {}) {
+export function get(url, params = {}, showError = true) {
   const fly = createFly();
   if (fly) {
     return new Promise((resolve, reject) => {
@@ -19,8 +19,19 @@ export function get(url, params = {}) {
           console.log(res);
           if (res && res.data && res.data.error_code === 0) {
             resolve(res);
-          }else{
-            reject(res)
+          } else {
+            if (showError) {
+              const msg = (res && res.data && res.data.msg) || "请求失败";
+              mpvue.showToast({
+                title: msg, //提示的内容,
+                icon: "cancel", //图标,
+                duration: 2000 //延迟时间,
+                // mask: true //显示透明蒙层，防止触摸穿透,
+                // success: res => {}
+              });
+            }
+
+            reject(res);
           }
         })
         .catch(err => {
@@ -30,7 +41,7 @@ export function get(url, params = {}) {
     });
   }
 }
-export function post(url, params = {}) {
+export function post(url, params = {},showError = true) {
   const fly = createFly();
   if (fly) {
     return new Promise((resolve, reject) => {
@@ -38,7 +49,22 @@ export function post(url, params = {}) {
         .post(url, params)
         .then(res => {
           console.log(res);
-          resolve(res);
+          if (res && res.data && res.data.error_code === 0) {
+            resolve(res);
+          } else {
+            if (showError) {
+              const msg = (res && res.data && res.data.msg) || "请求失败";
+              mpvue.showToast({
+                title: msg, //提示的内容,
+                icon: "cancel", //图标,
+                duration: 2000 //延迟时间,
+                // mask: true //显示透明蒙层，防止触摸穿透,
+                // success: res => {}
+              });
+            }
+
+            reject(res);
+          }
         })
         .catch(err => {
           handleError(err);

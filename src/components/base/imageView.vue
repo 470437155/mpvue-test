@@ -62,7 +62,14 @@ export default {
   computed: {},
   //监控data中的数据变化
   watch: {
-    src(newValue, oldValue) {}
+    src(newValue, preValue) {
+      if (newValue && newValue.length > 0 && newValue !== preValue){
+        this.$nextTick(()=>{
+          this.isLoading = true
+          this.error = false
+        })
+      }
+    }
   },
   //方法集合
   methods: {
