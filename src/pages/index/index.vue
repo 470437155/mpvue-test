@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="home" v-if="isAuth">
-      <SearchBar :disabled="true" :hotSearch="hotSearch" />
+      <SearchBar :disabled="true" :hotSearch="hotSearch" @onClick="onSearchBarClick"/>
       <HomeCard :data="homeCard" />
       <HomeBanner
         title="来了来了"
@@ -58,7 +58,7 @@
         />
       </div>
     </div>
-    <Auth v-if="!isAuth" @getUserInfo="init"/>
+    <Auth v-if="!isAuth" @getUserInfo="init" />
   </div>
 </template>
 
@@ -68,8 +68,22 @@ import HomeCard from "../../components/home/HomeCard";
 import HomeBanner from "../../components/home/HomeBanner";
 import HomeBook from "../../components/home/HomeBook";
 import Auth from "../../components/base/Auth";
-import { getHomeData, recommend, freeRead, hotBook } from "../../api/index";
-import { getSetting,getUserInfo } from "../../api/wechat";
+import {
+  getHomeData,
+  recommend,
+  freeRead,
+  hotBook,
+  register
+} from "../../api/index";
+import {
+  getSetting,
+  getUserInfo,
+  setStorageSync,
+  getStorageSync,
+  getUserOpenId,
+  showLoading,
+  hideLoading
+} from "../../api/wechat";
 export default {
   data() {
     return {
@@ -80,7 +94,7 @@ export default {
       freeRead: [],
       hotBook: [],
       category: [],
-      isAuth: false
+      isAuth: true
     };
   },
 
@@ -96,35 +110,37 @@ export default {
     // this.getHomeData();
   },
   methods: {
-    getHomeData() {
-      getHomeData({ openId: "1234" }).then(res => {
-        const {
-          data: {
-            hotSearch: { keyword },
-            shelf,
-            banner,
-            recommend,
-            freeRead,
-            hotBook,
-            category,
-            shelfCount
-          }
-        } = res.data;
-        this.hotSearch = keyword;
-        this.banner = banner;
-        this.recommend = recommend;
-        this.freeRead = freeRead;
-        this.hotBook = hotBook;
-        this.category = category;
-        this.homeCard = {
-          bookList: shelf,
-          num: shelfCount,
-          userInfo: {
-            avatar: "https://www.youbaobao.xyz/mpvue-res/logo.jpg",
-            nickname: "Ray"
-          }
-        };
-      });
+    getHomeData(openid, userInfo) {
+      getHomeData({ openId: openid })
+        .then(res => {
+          const {
+            data: {
+              hotSearch: { keyword },
+              shelf,
+              banner,
+              recommend,
+              freeRead,
+              hotBook,
+              category,
+              shelfCount
+            }
+          } = res.data;
+          this.hotSearch = keyword;
+          this.banner = banner;
+          this.recommend = recommend;
+          this.freeRead = freeRead;
+          this.hotBook = hotBook;
+          this.category = category;
+          this.homeCard = {
+            bookList: shelf,
+            num: shelfCount,
+            userInfo
+          };
+          hideLoading();
+        })
+        .catch(() => {
+          hideLoading();
+        });
     },
     recommendChange(key) {
       switch (key) {
@@ -151,33 +167,49 @@ export default {
     onBookMoreClick() {
       console.log("more click");
     },
-    onSearchBarClick() {},
+    onSearchBarClick() {
+      console.log(111);  
+      this.$router.push('/pages/search/main')
+    },
     onBannerClick() {
       console.log("banner click");
     },
-    getUserInfo(){      
+    getUserInfo() {
+      const onOpenIdComplete = (openId, userInfo) => {
+        this.getHomeData(openId, userInfo);
+        register(openId, userInfo);
+      };
       getUserInfo(
-        (res)=>{console.log(res);
+        userInfo => {
+          console.log(userInfo);
+          setStorageSync("userInfo", userInfo);
+          const openId = getStorageSync("openId");
+          if (!openId || openId.length === 0) {
+            getUserOpenId(openId => onOpenIdComplete(openId, userInfo));
+          } else {
+            onOpenIdComplete(openId, userInfo);
+          }
         },
-        (res)=>{console.log('fail');
-        },
-      )
+        res => {
+          console.log("fail"); //获取用户信息，抛出异常
+        }
+      );
     },
     getSetting() {
       getSetting(
         "userInfo",
-        () => {          
+        () => {
           this.isAuth = true;
-          this.getUserInfo()
-          this.getHomeData()
+          showLoading("正在加载");
+          this.getUserInfo();
         },
         () => {
           this.isAuth = false;
         }
       );
     },
-    init(){
-      this.getSetting()
+    init() {
+      this.getSetting();
     }
   },
 

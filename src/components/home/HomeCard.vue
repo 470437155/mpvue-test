@@ -4,7 +4,7 @@
     <div class="home-card-inner">
       <div class="user-info">
         <div class="avatar-wrapper">
-          <ImageView :src="avatar" round />
+          <ImageView :src="avatar" round height="100%" mode="scaleToFill"/>
         </div>
         <div class="nickname">{{nickname}}</div>
         <div class="shelf-text">书架共有{{3}}本好书</div>
@@ -13,12 +13,14 @@
       </div>
       <div class="book-info">
         <div class="book-wrapper">
-          <div class="book-img-wrapper" v-for="(item,index) in bookList" :key="index" @click="onBookClick">
-            <ImageView
-              :src="item.cover"
-            />
+          <div
+            class="book-img-wrapper"
+            v-for="(item,index) in bookList"
+            :key="index"
+            @click="onBookClick"
+          >
+            <ImageView :src="item.cover" />
           </div>
-          
         </div>
         <div class="shelf-wrapper">
           <div class="shelf">书架</div>
@@ -37,7 +39,7 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import ImageView from "../../components/base/ImageView";
-import Dialog from "vant-weapp/dist/dialog/dialog"
+import Dialog from "vant-weapp/dist/dialog/dialog";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: { ImageView },
@@ -58,14 +60,18 @@ export default {
   },
   //监听属性 类似于data概念
   computed: {
-    avatar(){
-      return (this.data && this.data.userInfo && this.data.userInfo.avatar) || ''
+    avatar() {
+      return (
+        (this.data && this.data.userInfo && this.data.userInfo.avatarUrl) || ""
+      );
     },
-    nickname(){
-      return (this.data && this.data.userInfo && this.data.userInfo.nickname) || ''
+    nickname() {
+      return (
+        (this.data && this.data.userInfo && this.data.userInfo.nickName) || ""
+      );
     },
-    bookList(){
-      return (this.data && this.data.bookList) || []
+    bookList() {
+      return (this.data && this.data.bookList) || [];
     }
   },
   //监控data中的数据变化
@@ -74,21 +80,22 @@ export default {
   methods: {
     gotoShelf() {},
     onBookClick() {
-      this.$emit('onClick')
+      this.$emit("onClick");
     },
     sign() {},
-    onFeedBackClick(){
+    onFeedBackClick() {
       Dialog.confirm({
-        title:'反馈',
-        message:"您是否确认提交反馈信息",
-        confirmButtonText:"是",
-        cancelButtonText:'否'
-      }).then(()=>{
-        console.log('是');
-      }).catch(()=>{
-        console.log('否');
-        
+        title: "反馈",
+        message: "您是否确认提交反馈信息",
+        confirmButtonText: "是",
+        cancelButtonText: "否"
       })
+        .then(() => {
+          console.log("是");
+        })
+        .catch(() => {
+          console.log("否");
+        });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -175,7 +182,7 @@ export default {
       justify-content: center;
       // line-height: 24px;
       text-align: center;
-      span{
+      span {
         color: #fff;
         font-size: 11px;
       }

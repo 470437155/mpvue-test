@@ -1,11 +1,11 @@
 <!--  -->
 <template>
-  <div class="image-view">
+  <div class="image-view" :style="{height}">
     <img
       :src="src"
       :mode="mode"
       :lazy-load="lazyLoad"
-      :style="{height:height}"
+      :style="{height}"
       :class="round? 'round image':'image'"
       v-show="!isLoading && !error"
       @load="onLoad"
@@ -15,7 +15,7 @@
       :src="src"
       :mode="mode"
       :lazy-load="lazyLoad"
-      :style="{height:height}"
+      :style="{height}"
       :class="round? 'round image':'image'"
       v-show="isLoading || error"
     />

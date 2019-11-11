@@ -3,7 +3,7 @@
     <div class="auth">
       <div class="auth-info">
         <div class="auth-img">
-          <ImageView src="https://www.youbaobao.xyz/mpvue-res/logo.jpg" round />
+          <ImageView src="https://www.youbaobao.xyz/mpvue-res/logo.jpg" round height="100%" mode="scaleToFill"/>
         </div>
         <div class="sub-title">登录小程序</div>
         <div class="title">全球好书免费读</div>
@@ -53,6 +53,7 @@ export default {
 
       .auth-img {
         width: 74px;
+        height: 74px;
       }
       .sub-title {
         margin-top: 18px;
