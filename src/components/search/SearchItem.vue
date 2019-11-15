@@ -20,7 +20,7 @@ export default {
         icon:String
     },
     methods:{
-        onclick(){
+        onClick(){
             this.$emit('onClick')
         }
     }
@@ -29,6 +29,8 @@ export default {
 
 <style lang="scss" scoped>
     .search-item-wrapper{
+        display: flex;
+        align-items: center;
         padding: 15px;
         height: 36.5px;
         .search-item-icon{
@@ -43,11 +45,16 @@ export default {
             }
         }
         .search-item-info{
+            margin-left: 15px;
             .search-item-title{
-                
+                color: #333;
+                font-size: 14px;
+                line-height: 20px;
             }
             .search-item-subtitle{
-
+                color: rgba(0,0,0,.45);
+                font-size: 12px;
+                line-height: 16.5px;
             }
         }
     }

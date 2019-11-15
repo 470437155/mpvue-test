@@ -34,6 +34,7 @@ export default {
 
 <style lang="scss" scoped>
 .tag-group-wrapper {
+  margin-top: 30px;
   .tag-group-header {
     display: flex;
     justify-content: space-between;
